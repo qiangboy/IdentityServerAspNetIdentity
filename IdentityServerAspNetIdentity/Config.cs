@@ -4,6 +4,7 @@
 
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 
 namespace IdentityServerAspNetIdentity
 {
@@ -21,6 +22,7 @@ namespace IdentityServerAspNetIdentity
             {
                 new ApiScope("scope1"),
                 new ApiScope("scope2"),
+                new ApiScope("identity.api", new List<string>(){ "name" }),
             };
 
         public static IEnumerable<Client> Clients =>
@@ -53,6 +55,21 @@ namespace IdentityServerAspNetIdentity
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope2" }
                 },
+
+                new Client
+                {
+                    ClientId = "identity.api",
+                    RequireClientSecret = false,
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = { "https://localhost:7251/swagger/oauth2-redirect.html" },
+                    FrontChannelLogoutUri = "https://localhost:7251",
+                    PostLogoutRedirectUris = { "https://localhost:7251" },
+                    AllowedCorsOrigins = { "https://localhost:7251" },
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "identity.api" }
+                }
             };
     }
 }

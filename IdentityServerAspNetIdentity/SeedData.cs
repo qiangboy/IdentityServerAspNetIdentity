@@ -3,8 +3,6 @@
 
 
 using IdentityModel;
-using IdentityServerAspNetIdentity.Data;
-using IdentityServerAspNetIdentity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +10,8 @@ using Serilog;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Domain.Identities;
+using Infrastructure;
 
 namespace IdentityServerAspNetIdentity
 {
@@ -22,7 +22,7 @@ namespace IdentityServerAspNetIdentity
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>(options =>
-               options.UseMySql(connectionString));
+               options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
